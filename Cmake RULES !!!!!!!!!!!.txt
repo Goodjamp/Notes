@@ -1,0 +1,118 @@
+1 - Generic template CMakeLists.txt file for the simple mcu arm base project:
+
+    
+
+
+
+1 - how to run cmake on the Windows with mingw compiler
+
+    VERY IMPORTANT!!!!!!!!!!!!!!!!!!!!!    
+	if used migw gcc used mingw32-gcc.exe compiler (not simpl gcc.exe)
+
+
+
+	 CMake chooses a generator before it starts evaluating any CMakeLists.txt files. By default, it chooses a generator
+	 based on runtime platform and available toolsets, and command-line options are the only way presently available to
+	 influence or override CMake's choice of generator.
+
+	the comand  -G "MinGW Makefiles" MUST BE USED
+	cmake -DCMAKE_C_COMPILER:FILEPATH=C:\path\to\compiler.exe -DCMAKE_CXX_COMPILER:FILEPATH=C:\path\to\compiler.exe -B build_folder -S path_to_cmakelist -G "MinGW Makefiles"
+
+2 - The compilator settings could be set with using next manner
+
+	set(CMAKE_C_FLAGS                               # OR CMAKE_CXX_FLAGS OR CMAKE_ASM_FLAGS or flags for other language !!!!!!!!!!!!!
+	   -mcpu=cortex-m4
+	   -fno-common
+	   #and other compliler options
+	)
+
+   add_compile_options(-mcpu=cortex-m4 -fno-common ) #and other compliler options
+   OR
+
+   
+2 - create variable with general compiler settings: hardware architecture, type of usage floating point and so on (like next, for the MCU STM32f411)
+
+	set(COMPILER_GENERAL_FLAGS "-mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -fno-common")
+	set(COMPILER_USER_FLAGS    "-g3 -Wall -Wno-multichar -fdata-sections -ffunction-sections -fno-strict-aliasing -ffreestanding -fno-builtin -fno-common")
+	set(LINKER_USER_FLAGS
+		-T${LINKER_SCRIPT}
+		-L${CMAKE_CURRENT_SOURCE_DIR}
+		--specs=nosys.specs
+		--specs=nano.specs
+		-fdata-sections
+		-ffunction-sections
+		-mfloat-abi=hard
+		-lc
+		-lm
+		-lnosys
+	)
+
+	set(CMAKE_C_FLAGS "${COMPILER_GENERAL_FLAGS} ${COMPILER_USER_FLAGS} -std=gnu99")
+	set(CMAKE_CXX_FLAGS "${COMPILER_GENERAL_FLAGS} ${COMPILER_USER_FLAGS}")
+
+    In other words, we need to create flags list with the same options for the linker and compiler.
+	It could seem that originaly the linker does not need compiler flags. But this flag need for the
+	Cmake, to select correct type of library (i.e. libraries with the correct architecture, floating usage type and so on).
+
+3 - If need, create dedicated variables with user flags for the linker (LINKER_USER_FLAGS) and compiler (COMPILER_USER_FLAGS)
+
+4- The head of the file could look lik this (c, cpp, asm)
+
+		cmake_minimum_required(VERSION 3.0.0)
+
+		set(CMAKE_SYSTEM_NAME Generic)
+		set(CMAKE_SYSTEM_VERSION 1)
+		set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)
+		set(CMAKE_SYSTEM_PROCESSOR arm)
+
+		set(CMAKE_C_COMPILER "arm-none-eabi-gcc")
+		set(CMAKE_CXX_COMPILER "arm-none-eabi-g++")
+		set(CMAKE_ASM_COMPILER "arm-none-eabi-gcc")
+
+		project(F401_CPPM CXX C ASM)
+
+		set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
+		set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
+		set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
+		set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
+
+
+
+
+5 - Minimum CMakeLists.txt for the PC GCC projects
+
+	cmake_minimum_required(VERSION 3.0.0)
+	project(testPrj)
+	include_directories(
+						src/folder1
+						src/folder2
+	)
+	add_executable(testPrj source1.c source2.c)
+
+	if need compiler with GCC, used next command string:
+
+	cmake -DCMAKE_C_COMPILER:FILEPATH=C:\path\to\compiler\mingw32-gcc.exe -DCMAKE_CXX_COMPILER:FILEPATH=C:\path\to\compile\mingw32-g++.exe -B build_folder -S path_to_cmakelists -G "MinGW Makefiles"
+
+    VERY IMPORTANT!!!!!!!!!!!!!!!!!!!!! 
+	(use mingw32-gcc.exe, mingw32-g+.exe for the GCC toolchain on the windows plathform !!!!!!!)
+
+6 - running some commands
+	add_custom_command  should be used
+
+	run custom command after build
+
+	run custom command (TARGET ${TARGET_NAME} POST_BUILD                          ${TARGET_NAME}  - after creating this object this command will be run. The name of the target could be name from the 
+																				  add_executable() or add_target()  
+		COMMENT "Generating ${BINARY}"
+		COMMAND ${CMAKE_OBJCOPY} "-Obinary" ${TARGET_NAME} ${BINARY}
+		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+	)
+	
+6 - variable operation
+    Create:
+	set(VAR_NAME
+	    VAR_VAL1
+		VAR_VAL
+	)
+	used variable
+	${VAR_NAME}

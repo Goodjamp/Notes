@@ -1,0 +1,36 @@
+#Delete branch 
+git branch -d branch_name
+
+#Add remote branche to traking
+git branch --track branch_name origin_name/remote_branch_name
+
+#Combine N commints (squash in inerective UI)
+git rebase -i -HEAD~N
+
+#Take commaits from the remote and place it before loacal commaits
+git pull --rebase origin_name origin_branch_name
+
+# rebase every commit after b and transplant it onto a
+git rebase --onto a b
+
+#Change  description to the last commit
+git commit --amend
+# OR
+git commit --amend -m "New commit description"
+
+#exit from the vim without save
+:q!
+
+#exit from the vim without saving
+:wq
+
+#Take one or more commits from the other branch: cherry-pick
+git cherry-pick <target-commit-hash>
+#multiple commits
+git cherry-pick <target-commit-hash_1> <target-commit-hash_2> <target-commit-hash_3> 
+#OR
+git cherry-pick <target-commit-hash_1>^^...<target-commit-hash_6> 
+
+
+#Rename local branch
+git branch -m <newname>
