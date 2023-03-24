@@ -1,0 +1,202 @@
+1 - Generic template CMakeLists.txt file for the simple mcu arm base project:
+
+	cmake_minimum_required(VERSION 3.0.0)
+
+	set(CMAKE_SYSTEM_NAME Generic)
+	set(CMAKE_SYSTEM_VERSION 1)
+	set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)
+	set(CMAKE_SYSTEM_PROCESSOR arm)
+
+	set(CMAKE_C_COMPILER "arm-none-eabi-gcc")
+	set(CMAKE_CXX_COMPILER "arm-none-eabi-g++")
+	set(CMAKE_ASM_COMPILER "arm-none-eabi-gcc")
+
+	project(stmTest CXX C ASM)    # after this command we the variable *CMAKE_PROJECT_NAME* will be aqual to the stmTest, and we can used it as a name of project
+
+	set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
+	set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
+	set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
+	set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
+
+	set(COMPILER_GENERAL_FLAGS "-mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -fno-common")
+	set(COMPILER_USER_FLAGS    "-g3 -Wall -Wno-multichar -fdata-sections -ffunction-sections -fno-strict-aliasing -ffreestanding -fno-builtin -fno-common")
+
+	set( HAL_SRC
+		Src/main.cpp
+		Src/stm32f4xx_it.c
+		startup_stm32f401xe.s
+		# add additional sorces files to the list
+	)
+
+	set(HAL_PATH
+		Inc
+		Src
+		# add additional path files to the list
+	)
+
+	add_definitions(
+		-DSTM32F401xE
+	)
+
+	include_directories(${HAL_PATH})
+
+	set(LINKER_SCRIPT STM32F401CEUx_FLASH.ld)
+	set(LINKER_USER_FLAGS
+		-T${LINKER_SCRIPT}
+		-L${CMAKE_CURRENT_SOURCE_DIR}
+		--specs=nosys.specs
+		--specs=nano.specs
+		-fdata-sections
+		-ffunction-sections
+		-lc
+		-lm
+		-lnosys
+		
+		-mcpu=cortex-m4
+		-mfloat-abi=hard
+	)
+
+	#set compile option for each copiler type: C, CPP and so on
+	set(CMAKE_C_FLAGS "${COMPILER_GENERAL_FLAGS} ${COMPILER_USER_FLAGS} -std=gnu99")
+	set(CMAKE_CXX_FLAGS "${COMPILER_GENERAL_FLAGS} ${COMPILER_USER_FLAGS}")
+
+	#add linker options
+	add_link_options(${LINKER_USER_FLAGS})
+
+	add_executable(${CMAKE_PROJECT_NAME}.elf  ${HAL_SRC})
+    
+
+
+
+2 - how to run cmake on the Windows with mingw compiler
+
+    VERY IMPORTANT!!!!!!!!!!!!!!!!!!!!!    
+	if used migw gcc used mingw32-gcc.exe compiler (not simpl gcc.exe)
+
+
+	 CMake chooses a generator before it starts evaluating any CMakeLists.txt files. By default, it chooses a generator
+	 based on runtime platform and available toolsets, and command-line options are the only way presently available to
+	 influence or override CMake's choice of generator.
+
+	the comand  -G "MinGW Makefiles" MUST BE USED
+	cmake -DCMAKE_C_COMPILER:FILEPATH=C:\path\to\compiler.exe -DCMAKE_CXX_COMPILER:FILEPATH=C:\path\to\compiler.exe -B build_folder -S path_to_cmakelist -G "MinGW Makefiles"
+
+3 - The compilator settings could be set the compiler option with multiple manner. For example
+
+    1 - Number one way: using commands *add_compile_options* together with *set(CMAKE_LANGUAGE_FLAGS   "optins")*
+	
+		# set combine generic otions for the all compiler. In this list I added the optins that use to descride the mcu: architecture, type of floating point, type of assembler
+		set(COMPILER_GENERAL_FLAGS
+			-mcpu=cortex-m4
+			-mthumb
+			-mfloat-abi=hard
+			-mfpu=fpv4-sp-d16
+			-fno-common
+		)
+		add_compile_options(${COMPILER_GENERAL_FLAGS__})
+		
+		# on the next list I added the coptions of compilation. The lists COMPILER_GENERAL_FLAGS and COMPILER_GENERAL_FLAGS could be combine!!!!
+		# But, if COMPILER_USER_FLAGS will be used with command set(CMAKE_LANGUAGE_FLAGS   "optins"), the options must be inside " ..... " !!!
+		
+		set(COMPILER_USER_FLAGS    "-g3 -Wall -Wno-multichar -fdata-sections -ffunction-sections -fno-strict-aliasing -ffreestanding -fno-builtin -fno-common")
+		
+		# Add personal options for each taret compiler
+		set(CMAKE_C_FLAGS "${COMPILER_USER_FLAGS} -std=gnu99")  # Very important!!! 
+		set(CMAKE_CXX_FLAGS "${COMPILER_USER_FLAGS}")
+
+
+    2 - Number two way: using only commands *set(CMAKE_LANGUAGE_FLAGS   "optins")*
+	    
+		#descride the generic target options 
+	    set(COMPILER_GENERAL_FLAGS "-mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -fno-common")
+		set(COMPILER_USER_FLAGS    "-g3 -Wall -Wno-multichar -fdata-sections -ffunction-sections -fno-strict-aliasing -ffreestanding -fno-builtin -fno-common")
+		
+		# Add personal options for each target compiler
+		set(CMAKE_C_FLAGS "${COMPILER_GENERAL_FLAGS} ${COMPILER_USER_FLAGS} -std=gnu99")
+        set(CMAKE_CXX_FLAGS "${COMPILER_GENERAL_FLAGS} ${COMPILER_USER_FLAGS}")
+
+   
+4 - Linker options descriptions
+
+	set(LINKER_SCRIPT STM32F401CEUx_FLASH.ld)  # linker script name
+	set(LINKER_USER_FLAGS
+		-T${LINKER_SCRIPT}
+		-L${CMAKE_CURRENT_SOURCE_DIR}
+		--specs=nosys.specs
+		--specs=nano.specs
+		-fdata-sections
+		-ffunction-sections
+		-lc
+		-lm
+		-lnosys
+		
+		-mcpu=cortex-m4
+		-mfloat-abi=hard
+	)
+
+    As we can see, the last two option is similar with option from the compiler options list.
+	It could seem that originaly the linker does not need compiler flags. But this flag need for the
+	Cmake, to select correct type of library (i.e. libraries with the correct architecture, floating usage type and so on).
+
+
+4- The cmake could automatically find the target compiler. We only need to set the target compiler names for each compilers (c, cpp, asm)
+
+	cmake_minimum_required(VERSION 3.0.0)
+
+	set(CMAKE_SYSTEM_NAME Generic)
+	set(CMAKE_SYSTEM_VERSION 1)
+	set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)
+	set(CMAKE_SYSTEM_PROCESSOR arm)
+    
+	# Set the target compiler names for each compilers
+	set(CMAKE_C_COMPILER "arm-none-eabi-gcc")
+	set(CMAKE_CXX_COMPILER "arm-none-eabi-g++")
+	set(CMAKE_ASM_COMPILER "arm-none-eabi-gcc")
+
+	project(stmTest CXX C ASM)    # after this command we the variable *CMAKE_PROJECT_NAME* will be aqual to the stmTest, and we can used it as a name of project
+
+	set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
+	set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
+	set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
+	set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
+
+
+
+
+5 - Minimum CMakeLists.txt for the PC GCC projects
+
+	cmake_minimum_required(VERSION 3.0.0)
+	project(testPrj)
+	include_directories(
+						src/folder1
+						src/folder2
+	)
+	add_executable(testPrj source1.c source2.c)
+
+	if need compiler with GCC, used next command string:
+
+	cmake -DCMAKE_C_COMPILER:FILEPATH=C:\path\to\compiler\mingw32-gcc.exe -DCMAKE_CXX_COMPILER:FILEPATH=C:\path\to\compile\mingw32-g++.exe -B build_folder -S path_to_cmakelists -G "MinGW Makefiles"
+
+    VERY IMPORTANT!!!!!!!!!!!!!!!!!!!!! 
+	(use mingw32-gcc.exe, mingw32-g+.exe for the GCC toolchain on the windows plathform !!!!!!!)
+
+6 - running some commands
+	add_custom_command  should be used
+
+	run custom command after build
+
+	run custom command (TARGET ${TARGET_NAME} POST_BUILD                          ${TARGET_NAME}  - after creating this object this command will be run. The name of the target could be name from the 
+																				  add_executable() or add_target()  
+		COMMENT "Generating ${BINARY}"
+		COMMAND ${CMAKE_OBJCOPY} "-Obinary" ${TARGET_NAME} ${BINARY}
+		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+	)
+	
+6 - variable operation
+    Create:
+	set(VAR_NAME
+	    VAR_VAL1
+		VAR_VAL
+	)
+	used variable
+	${VAR_NAME}
