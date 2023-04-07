@@ -11,7 +11,7 @@
 	set(CMAKE_CXX_COMPILER "arm-none-eabi-g++")
 	set(CMAKE_ASM_COMPILER "arm-none-eabi-gcc")
 
-	project(stmTest CXX C ASM)    # after this command we the variable *CMAKE_PROJECT_NAME* will be aqual to the stmTest, and we can used it as a name of project
+	project(stmTest CXX C ASM)    # after this command the variable *CMAKE_PROJECT_NAME* will be aqual to the stmTest, and we can used it as a name of project
 
 	set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
 	set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
@@ -71,21 +71,22 @@
 2 - how to run cmake on the Windows with mingw compiler
 
     VERY IMPORTANT!!!!!!!!!!!!!!!!!!!!!    
-	if used migw gcc used mingw32-gcc.exe compiler (not simpl gcc.exe)
+	if used mingw-gcc used mingw32-gcc.exe compiler (not simpl gcc.exe)
 
 
-	 CMake chooses a generator before it starts evaluating any CMakeLists.txt files. By default, it chooses a generator
-	 based on runtime platform and available toolsets, and command-line options are the only way presently available to
-	 influence or override CMake's choice of generator.
+	CMake chooses a generator before it starts evaluating any CMakeLists.txt files. By default, it chooses a generator
+	based on runtime platform and available toolsets, and command-line options are the only way presently available to
+	influence or override CMake's choice of generator.
 
 	the comand  -G "MinGW Makefiles" MUST BE USED
 	cmake -DCMAKE_C_COMPILER:FILEPATH=C:\path\to\compiler.exe -DCMAKE_CXX_COMPILER:FILEPATH=C:\path\to\compiler.exe -B build_folder -S path_to_cmakelist -G "MinGW Makefiles"
 
-3 - The compilator settings could be set the compiler option with multiple manner. For example
+3 - The compilator settings could be set with multiple manner.
 
     1 - Number one way: using commands *add_compile_options* together with *set(CMAKE_LANGUAGE_FLAGS   "optins")*
 	
-		# set combine generic otions for the all compiler. In this list I added the optins that use to descride the mcu: architecture, type of floating point, type of assembler
+		# Set combine generic otions for the all compiler.
+		# In this list I added the optins that use to descride the mcu: architecture, type of floating point, type of assembler
 		set(COMPILER_GENERAL_FLAGS
 			-mcpu=cortex-m4
 			-mthumb
@@ -95,9 +96,10 @@
 		)
 		add_compile_options(${COMPILER_GENERAL_FLAGS__})
 		
-		# on the next list I added the coptions of compilation. The lists COMPILER_GENERAL_FLAGS and COMPILER_GENERAL_FLAGS could be combine!!!!
-		# But, if COMPILER_USER_FLAGS will be used with command set(CMAKE_LANGUAGE_FLAGS   "optins"), the options must be inside " ..... " !!!
-		
+		# On the next step I created user variable COMPILER_USER_FLAGS and assigned some other compilation options. As we can see, we can use system variabe
+		# COMPILER_GENERAL_FLAGS and COMPILER_USER_FLAGS together. But, if COMPILER_USER_FLAGS will be used with command set(CMAKE_LANGUAGE_FLAGS   "optins"), 
+		# the options must be placed in quotes " ...options... " !!!
+
 		set(COMPILER_USER_FLAGS    "-g3 -Wall -Wno-multichar -fdata-sections -ffunction-sections -fno-strict-aliasing -ffreestanding -fno-builtin -fno-common")
 		
 		# Add personal options for each taret compiler
@@ -107,7 +109,7 @@
 
     2 - Number two way: using only commands *set(CMAKE_LANGUAGE_FLAGS   "optins")*
 	    
-		#descride the generic target options 
+		#descride the generic target options. The options must be placed in quotes " ...options... "
 	    set(COMPILER_GENERAL_FLAGS "-mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -fno-common")
 		set(COMPILER_USER_FLAGS    "-g3 -Wall -Wno-multichar -fdata-sections -ffunction-sections -fno-strict-aliasing -ffreestanding -fno-builtin -fno-common")
 		
@@ -134,12 +136,12 @@
 		-mfloat-abi=hard
 	)
 
-    As we can see, the last two option is similar with option from the compiler options list.
-	It could seem that originaly the linker does not need compiler flags. But this flag need for the
-	Cmake, to select correct type of library (i.e. libraries with the correct architecture, floating usage type and so on).
+    # As we can see, the last two option is similar with option from the compiler options list.
+	# It could seem that originaly the linker does not need compiler flags. But this flag need for the
+	# Cmake, to select correct type of library (i.e. libraries with the correct architecture, floating usage type and so on).
 
 
-4- The cmake could automatically find the target compiler. We only need to set the target compiler names for each compilers (c, cpp, asm)
+5 - The cmake could automatically find the target compiler. We only need to set the target compiler names for each compilers (c, cpp, asm and so on)
 
 	cmake_minimum_required(VERSION 3.0.0)
 
@@ -153,7 +155,7 @@
 	set(CMAKE_CXX_COMPILER "arm-none-eabi-g++")
 	set(CMAKE_ASM_COMPILER "arm-none-eabi-gcc")
 
-	project(stmTest CXX C ASM)    # after this command we the variable *CMAKE_PROJECT_NAME* will be aqual to the stmTest, and we can used it as a name of project
+	project(stmTest CXX C ASM)    # after this command the variable *CMAKE_PROJECT_NAME* will be aqual to the stmTest, and we can used it as a name of project
 
 	set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
 	set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
@@ -163,7 +165,7 @@
 
 
 
-5 - Minimum CMakeLists.txt for the PC GCC projects
+6 - Minimum CMakeLists.txt for the PC GCC projects
 
 	cmake_minimum_required(VERSION 3.0.0)
 	project(testPrj)
@@ -173,30 +175,30 @@
 	)
 	add_executable(testPrj source1.c source2.c)
 
-	if need compiler with GCC, used next command string:
+	# if need compiler with GCC, used next command string:
 
 	cmake -DCMAKE_C_COMPILER:FILEPATH=C:\path\to\compiler\mingw32-gcc.exe -DCMAKE_CXX_COMPILER:FILEPATH=C:\path\to\compile\mingw32-g++.exe -B build_folder -S path_to_cmakelists -G "MinGW Makefiles"
 
-    VERY IMPORTANT!!!!!!!!!!!!!!!!!!!!! 
-	(use mingw32-gcc.exe, mingw32-g+.exe for the GCC toolchain on the windows plathform !!!!!!!)
+    # VERY IMPORTANT!!!!!!!!!!!!!!!!!!!!! 
+	# (use mingw32-gcc.exe, mingw32-g+.exe for the GCC toolchain on the windows plathform !!!!!!!)
 
-6 - running some commands
-	add_custom_command  should be used
+7 - Running some commands
+	# Add_custom_command  should be used
+	# The next example describe the custom command running after creating the TARGET_NAME object
 
-	run custom command after build
-
-	run custom command (TARGET ${TARGET_NAME} POST_BUILD                          ${TARGET_NAME}  - after creating this object this command will be run. The name of the target could be name from the 
-																				  add_executable() or add_target()  
+	run custom command (TARGET ${TARGET_NAME} POST_BUILD              # ${TARGET_NAME}  - after TARGET_NAME (it could be the name of *.exe file) this command will be run. The name of the target could be name from the 
+																	  # add_executable() or add_target()  
 		COMMENT "Generating ${BINARY}"
 		COMMAND ${CMAKE_OBJCOPY} "-Obinary" ${TARGET_NAME} ${BINARY}
 		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 	)
 	
-6 - variable operation
-    Create:
+8 - Variable operation
+    # Create:
 	set(VAR_NAME
 	    VAR_VAL1
 		VAR_VAL
 	)
-	used variable
+
+	# used variable
 	${VAR_NAME}

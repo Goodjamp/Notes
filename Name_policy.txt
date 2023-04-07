@@ -1,0 +1,11 @@
+# the name of the list element coud be created base on the LIST_NAME + Item:
+#
+
+typedef struct {
+    uint8_t val
+} ListNameItem;
+
+typedef struct {
+    uint32_t itmesNumber;
+	ListNameItem item[]
+} ListName;
