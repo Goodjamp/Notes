@@ -9,3 +9,11 @@ typedef struct {
     uint32_t itmesNumber;
 	ListNameItem item[]
 } ListName;
+
+# Good idea used word entry
+
+
+
+# The cunantity on the name looks god wit Number word
+
+uint32_t itemNumber; 

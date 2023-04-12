@@ -1,0 +1,13 @@
+1 - remove folder recursively:
+    rmdir /S /Q dirName
+	;/S - recursively, /Q - disable prompting
+	
+2 - take a bat file input argument, use symbol %
+    echo arg 0 %1 
+	
+3 - Cycles. Usualy bat file 
+
+set list = 1 2 3 4 
+(for %%a in (%list%) do ( 
+   echo %%a 
+))

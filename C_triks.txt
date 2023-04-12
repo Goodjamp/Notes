@@ -30,3 +30,34 @@ a = 4+2;
 5 еnum, розмір елементуу списка
 6 union, розмір всієї конструкції
 7 
+
+
+
+                                           Octal or Hexadecimal
+Suffix        Decimal Constant                 Constant
+---------------------------------------------------------------------------
+none          int                           int
+              long int                      unsigned int
+              long long int                 long int                                
+                                            unsigned long int
+                                            long long int
+                                            unsigned long long int
+---------------------------------------------------------------------------
+u or U        unsigned int                  unsigned int
+              unsigned long int             unsigned long int
+              unsigned long long int        unsigned long long int
+---------------------------------------------------------------------------
+l or L        long int                      long int
+              long long int                 unsigned long int
+                                            long long int
+                                            unsigned long long int
+---------------------------------------------------------------------------
+Both u or U   unsigned long int             unsigned long int
+and  l or L   unsigned long long int        unsigned long long int
+---------------------------------------------------------------------------
+ll or LL      long long int                 long long int
+                                            unsigend long long int
+---------------------------------------------------------------------------
+Both u or U   unsigned long long int        unsigned long long int
+and  ll or LL
+---------------------------------------------------------------------------

@@ -1,3 +1,0 @@
-1 - remove folder recursively:
-    rmdir /S /Q dirName
-	;/S - recursively, /Q - disable prompting
