@@ -4,25 +4,19 @@ git branch -d branch_name
 #Add remote branche to traking
 git branch --track branch_name origin_name/remote_branch_name
 
-#Combine N commints (squash in inerective UI)
+#Combine N comits (squash in inerective UI)
 git rebase -i -HEAD~N
 
-#Take commaits from the remote and place it before loacal commaits
+#Take comits from the remote and place it before loacal commaits
 git pull --rebase origin_name origin_branch_name
 
-# rebase every commit after b and transplant it onto a
-git rebase --onto a b
+#Кebase every commit after B and transplant it onto A
+git rebase --onto A B
 
 #Change  description to the last commit
 git commit --amend
 # OR
 git commit --amend -m "New commit description"
-
-#exit from the vim without save
-:q!
-
-#exit from the vim without saving
-:wq
 
 #Take one or more commits from the other branch: cherry-pick
 git cherry-pick <target-commit-hash>
@@ -31,6 +25,17 @@ git cherry-pick <target-commit-hash_1> <target-commit-hash_2> <target-commit-has
 #OR
 git cherry-pick <target-commit-hash_1>^^...<target-commit-hash_6> 
 
+#remove file from index
+git rm --cached FileName
 
 #Rename local branch
 git branch -m <newname>
+
+#Git stash apply special stash, for example 2
+git stash apply 2
+
+#exit from the vim without save
+:q!
+
+#exit from the vim without saving
+:wq

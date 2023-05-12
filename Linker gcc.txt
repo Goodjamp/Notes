@@ -1,20 +1,20 @@
 See
-
 https://web.mit.edu/rhel-doc/3/rhel-ld-en-3/sections.html
 
 
 Description LD script
-
 https://ftp.gnu.org/old-gnu/Manuals/ld-2.9.1/html_chapter/ld_3.html
 
 
-
 !!!!!!!!!!!!!!!!!!!!!!!!
-Generally, the LD file describes the section. Section - it is a part of the FW image, that includes some part of the code or data (variables).
-The section (out section) includes one or more sections.
-The section allowed the user to place code or data on the dedicated place inside the FW image.
-in section - special name, defined inside the library or created by the user on the code, to sign functions or variables.
-            For example, we can use the next construction to tell the linker that we wont placed variabel *a* inside the section *inSectionName_1*.
+Generally, the LD file describes the section. Section - it is a logical part of the FW image, that includes some part of the code or data (variables).
+These are two logical section types: input section, and output section.
+The input section describes the part of the code (variable function and so on) that must be placed inside the same place on the external storage.
+The output section combines one or more input sections with the physical output section.
+The section (out section) includes one or more input sections.
+In section - special name, defined inside the library or created by the user on the code, to sign
+             functions or variables. For example, we can use the next lexical construction to tell
+			 the linker that we need place the variable *a* inside the section *inSectionName_1*.
 
             __attribute__((section(".inSectionName_1"), used)) 	char a;
 			
@@ -40,6 +40,24 @@ SECTION {
  * C style comments support
  * Point (.) keep current position of linking
  */
+ 
+  /***********************************************General sections description *******************************************/
+ 
+ /*
+ *General section description
+ */
+ .outSection: {
+	filename( inSection1 )
+	filename( inSection1 , inSection2, ... )
+	filename( inSection1 inSection2 ... )
+ }
+ 
+ /*
+  * We can use symbol (*) instead of filename to notify the linker to take a target input section from all files.
+  */
+   .outSection: {
+	*( inSection1 )
+ }
  
  /***********************************************Sections description example_1*******************************************/
  
@@ -83,7 +101,6 @@ SECTION {
      * meaning: on the all files take data from the input section inSectionName_2 and placed on the output section outSectionName_2.
      * The command *KEEP* means that even if data placed on the inSectionName_2 does not use on the code, they will not be skipped by the linker and will be added to the output in any case.
 	 *
-	 * Generaly 
 	 */
 
 

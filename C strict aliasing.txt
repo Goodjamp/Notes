@@ -1,0 +1,28 @@
+https://cellperformance.beyond3d.com/articles/2006/06/understanding-strict-aliasing.html
+
+One pointer is said to alias another pointer when both refer to the same location or object. In this example,
+
+uint32_t 
+swap_words( uint32_t arg )
+{
+  uint16_t* const sp = (uint16_t*)&arg;
+  uint16_t        hi = sp[0];
+  uint16_t        lo = sp[1];
+  
+  sp[1] = hi;
+  sp[0] = lo;
+
+  return (arg);
+} 
+
+
+Dereferencing a cast of a variable from one type of pointer to a different type is usually in violation of the strict aliasing rule.  !!!
+
+
+CASTING TO CHAR*
+
+It is always presumed that a char* may refer to an alias of any object. It is therefore quite safe, if perhaps a bit unoptimal
+(for architecture with wide loads and stores) to cast any pointer of any type to a char* type.
+ 
+ BUT !!!
+ Casting from a pointer of one type to pointer of an unrelated type through a char* is undefined.
