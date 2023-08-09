@@ -1,5 +1,8 @@
 https://cellperformance.beyond3d.com/articles/2006/06/understanding-strict-aliasing.html
 
+WHAT IS STRICT ALIASING?
+Strict aliasing is an assumption, made by the C (or C++) compiler, that dereferencing pointers to objects of different types will never refer to the same memory location (i.e. alias eachother.)
+
 One pointer is said to alias another pointer when both refer to the same location or object. In this example,
 
 uint32_t 

@@ -1,0 +1,1 @@
+qDebug() << "Current thread "<<QThread::currentThreadId();

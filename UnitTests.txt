@@ -1,0 +1,3 @@
+The next frame-work could be use:
+- Unity (unit test Framework) + fff (Fake Function Framework) for the implementation mock. fff  use one fff.h file
+- Cmocka (All in one). Mock based on --wrap propery of the linker. 
