@@ -187,10 +187,10 @@
     # Add_custom_command  should be used
     # The next example describe the custom command running after creating the TARGET_NAME object
 
-    run custom command (TARGET ${TARGET_NAME} POST_BUILD              # ${TARGET_NAME}  - after TARGET_NAME (it could be the name of *.exe file) this command will be run. The name of the target could be name from the 
+    add_custom_command (TARGET ${TARGET_NAME} POST_BUILD              # ${TARGET_NAME}  - after TARGET_NAME (it could be the name of *.exe) this command will be run. The name of the target could be name from the 
                                                                       # add_executable() or add_target()
         COMMENT "Generating ${BINARY}"
-        COMMAND ${CMAKE_OBJCOPY} "-Obinary" ${TARGET_NAME} ${BINARY}
+        COMMAND ${CMAKE_OBJCOPY} "-O ihex" ${TARGET_NAME} ${BINARY}
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     )
 

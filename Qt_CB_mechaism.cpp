@@ -80,11 +80,10 @@ private
 	}
 }
 
-
 /*
- * Also we must declera the CB function signature as new metatype !!!!!!!!!
+ * Also we must declarate the CB function signature as new metatype !!!!!!!!!
  * We can do it on the main.cpp
- take into acout that we must declare argument together type - name: int a !!!!!
+ * take into acout that we must declare argument together type - name: signature is *int a*, we should declare *int a*, not only *int* !!
  */
 qRegisterMetaType<std::function<void(int a, bool b)>>("std::function<void(int a, bool b)>");
  
