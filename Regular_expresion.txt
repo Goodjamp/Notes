@@ -41,4 +41,21 @@ E{n,m}	Соответствует не меньше n и не больше m в�
 				[^\. , ^\s]qw - найти строку, первый сивол которой НЕ "." и НЕ " ", второй "q", третий "w" (тоесть не подхядя последовательности ".qw", " qw")
 
 
+
+X(?=Y) Lookahead (Поиск выражения X, если после X находится выражение Y). It means "look for X, but match only if followed by Y". There may be any pattern instead of X and Y. For example, on the string "1 turkey costs 30€", the regular expresion "\d+(?=€)" return 30
+       More complex tests are possible, e.g. X(?=Y)(?=Z) means:
+       1 - Find X.
+       2 - Check if Y is immediately after X (skip if isn’t).
+       3 - Check if Z is immediately after Y (skip if isn’t).
+       4 - If both tests passed, then it’s the match.
+	   
+(?!Y)X Negative lookahead (Поиск выражения X, если после X НЕ находится выражение Y)
+
+(?<=Y)X Lookbehind (Поиск выражения X, если перед X находится выражение Y)
+
+(?<!Y)X Negative Lookbehind (Поиск выражения X, если перед X НЕ находится выражение Y)
+
+Если нужно включить Y в результаты поиска, нужно Y поместить в скобки, напрмер для Negative Lookbehind
+       (?<=(Y))X
+
 https://www.technical-recipes.com/2020/using-regex-to-find-and-replace-text-in-notepad/

@@ -12,6 +12,30 @@ set list = 1 2 3 4
    echo %%a 
 ))
 
-4 - create variable
+4 - Variable operation
+4.1 - create variable
 
-#create variable 
+#create a  variable
+set var=Hellow world :: string type
+set /A var=5         :: number type
+
+4.2 take a variable value, use %var%
+
+echo %var% 
+
+4.3 ariphmetical operation
+
+set /A a=1
+set /A b=2
+set a=%a%+%b%
+echo %a%
+
+5 Coment string. use symbol ::
+
+:: coment string
+
+6 IF statement
+
+set var=hellow
+
+if %var%==%1 echo "equal"
