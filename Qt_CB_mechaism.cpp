@@ -2,12 +2,12 @@
 #include <stdint.h>
 
 /* 
- * On the Qt we can tx CB function over the signal, to on the slot.
- * To do this we can use *function* metjhod of the std library, like next:
+ * On the Qt, we can tx CB (the method of the class called from another class) over the signal, to the slot.
+ * To do this we can use the *function* method of the std library, like next:
  * std::function<void(int a, bool b)>
  * 
  *
- * descri macrodefinition to isus pass CB function over the signal args
+ * describing the macro definition to invoke CB method that was passed over the signal args
  */
 #define CB_WRAP_2(CLASS,FUN)    std::bind(&CLASS::FUN, this, std::placeholders::_1, std::placeholders::_2)
 
@@ -21,6 +21,7 @@
  * CB function with 2 input arguments 
  */
 
+/*********************************class A - The class from which the CB method is called*******************************/
 class A: public QObject {
     Q_OBJECT
 public:
@@ -30,7 +31,9 @@ public:
 private:
     int vara;
 	bool varb;
+
 public slots:
+
     /*
 	 * Declare slot with one CB input argument
 	 */
@@ -43,16 +46,17 @@ public slots:
 	}
 }
 
+/*********************************class B - the class with CB method*******************************/
 class B: public QObject {
     Q_OBJECT
 public:
     explicit B(QObject *parent = nullptr)
 	{
-	    varB = new B();
-		connect(this, &A::sigA, varB, B::sltB);
+	    classA = new A();
+		connect(this, &B::sigB, varA, A::sltA);
 	}
     ~B(){};
-    
+
 	/*
 	 * On the next methot I show hav to emit signal with CB function
 	 */
@@ -60,14 +64,15 @@ public:
 	{
 	    emit sigB(CB_WRAP_2(B, cbB));
 	}
-	
+
 signals:
     /*
 	 * Declare signal with one CB input argument
 	 */
-    sigA(std::function<void(int a, bool b)> cb);
+    sigB(std::function<void(int a, bool b)> cb);
+
 private
-    B *varB;
+    A *classA;
 	
 	/*
 	 * Describe CB function according signature from the signal-slot
@@ -83,7 +88,7 @@ private
 /*
  * Also we must declarate the CB function signature as new metatype !!!!!!!!!
  * We can do it on the main.cpp
- * take into acout that we must declare argument together type - name: signature is *int a*, we should declare *int a*, not only *int* !!
+ * Take into acout that we must declare argument together type - name: signature is *int a*, we should declare *int a*, not only *int* !!
  */
 qRegisterMetaType<std::function<void(int a, bool b)>>("std::function<void(int a, bool b)>");
  
