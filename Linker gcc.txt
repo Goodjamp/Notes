@@ -7,7 +7,11 @@ https://ftp.gnu.org/old-gnu/Manuals/ld-2.9.1/html_chapter/ld_3.html
 
 
 !!!!!!!!!!!!!!!!!!!!!!!!
-Generally, the LD file describes the section. Section - it is a logical part of the FW image, that includes some part of the code or data (variables).
+Generally, the LD file describes the regions and section.
+
+Region - it is a part of the memory where palced variouse sections
+
+Section - it is a logical part of the FW image, that includes some part of the code or data (variables).
 These are two logical section types: input section, and output section.
 The input section describes the part of the code (variable function and so on) that must be placed inside the same place on the external storage.
 The output section combines one or more input sections with the physical output section.
@@ -47,86 +51,89 @@ SECTION {
  *General section description
  */
  .outSection: {
-	filename( inSection1 )
-	filename( inSection1 , inSection2, ... )
-	filename( inSection1 inSection2 ... )
- }
+	filename( inSection_1_Name )
+	filename( inSection_1_Name , inSection_2_Name, ... )
+	filename( inSection_1_Name inSection_2_Name ... )
+ } > RegionName
  
  /*
+  * the RegionName argumenf is not strongly required
+  *
   * We can use symbol (*) instead of filename to notify the linker to take a target input section from all files.
   */
    .outSection: {
-	*( inSection1 )
+	*( inSection_1_Name )
  }
  
  /***********************************************Sections description example_1*******************************************/
  
-    .outSectionName_1:
+    .outSection_1_Name:
 	{
-	    *(.inSectionName_1)
+	    *(.inSection_1_Name)
 	}
 	
 	/*
 	 * OR one line
 	 */
-	.outSectionName_1: {*(.inSectionName_1)}
+	
+	.outSection_1_Name: {*(.inSection_1_Name)}
 
     /*
-	 * !!!!! out section name - outSectionName_1
-	 * !!!!! in section name - inSectionName_1
-	 * This construction descride the out section outSectionName_1.
-	 * The point at the beginning of the name of the section means that the entry point of the outSectionName_1 is equal to the current point value (.)
+	 * !!!!! out section name - outSection_1_Name
+	 * !!!!! in section name - inSection_1_Name
+	 * This construction descride the out section outSection_1_Name.
+	 * The point at the beginning of the name of the section means that the entry point of the outSection_1_Name is equal to the current point value (.)
 	 * String: 
 	 *         *(.inSectionName_1)
-     * meaning: on the all files take data from the input section inSectionName_1 and placed on the output section outSectionName_1. 
+     * meaning: on the all files take data from the input section inSectionName_1 and placed on the output section outSection_1_Name. 
 	 */
 	 
 
-    .outSectionName_1:
+    .outSection_1_Name:
 	{
-	    *(.inSectionName_1)
-		*(.inSectionName_2)
+	    *(.inSection_1_Name)
+		*(.inSection_2_Name)
 	}
 
  /***********************************************Sections description example_2*******************************************/
-    .outSectionName_2:
+    .outSection_2_Name:
 	{
-	    KEEP(*(.inSectionName_2))
+	    KEEP(*(.inSection_2_Name))
 	}
     /*
-	 * This construction descride the out section outSectionName_2.
-	 * The point at the beginning of the name of the section means that the entry point of the outSectionName is equal to the current point value (.)
+	 * This construction descride the out section outSection_2_Name.
+	 * The point at the beginning of the name of the section means that the entry point of the outSection_N_Name is equal to the current point value (.)
 	 * String: 
 	 *         KEEP(*(.inSectionName_2))
-     * meaning: on the all files take data from the input section inSectionName_2 and placed on the output section outSectionName_2.
+     * meaning: on the all files take data from the input section inSectionName_2 and placed on the output section outSection_2_Name.
      * The command *KEEP* means that even if data placed on the inSectionName_2 does not use on the code, they will not be skipped by the linker and will be added to the output in any case.
 	 *
 	 */
 
 
  /***********************************************Sections description example_3*******************************************/
-    .outSectionName_3 ALIGN(0x1000):
+    .outSection_3_Name ALIGN(0x1000):
 	{
-	    *(.inSectionName_3)
+	    *(.inSection_3_Name)
 	}
     /*
-	 * This construction descride the out section outSectionName_3.
+	 * This construction descride the out section outSection_3_Name.
 	 * String: 
-	 *         .outSectionName_3 ALIGN(0x1000)
-     * meaning: placed the output section outSectionName_3 after point (.) with alight to (0x1000)
+	 *         .outSection_3_Name ALIGN(0x1000)
+     * meaning: placed the output section outSection_3_Name after point (.) with alight to (0x1000)
 	 */
 
 
  /***********************************************Sections description example_4*******************************************/
-    outSectionName_ 0x53000:
+    outSection_3_Name 0x53000:
 	{
-	    *(.inSectionName_4)
+	    *(.inSection_4_Name)
 	}
     /*
-	 * This construction descride the out section outSectionName_3.
+	 * This construction descride the out section outSection_3_Name.
 	 * String: 
-	 *         .outSectionName_3 ALIGN(0x1000)
-     * meaning: placed the output section outSectionName_3 after point (.) with alight to (0x1000)
+	 *         .outSection_3_Name ALIGN(0x1000)
+     * meaning: placed the output section outSection_3_Name after point (.) with alight to (0x1000)
 	 */
 
 }
