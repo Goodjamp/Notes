@@ -164,8 +164,6 @@
     set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
 
 
-
-
 6 - Minimum CMakeLists.txt for the PC GCC projects
 
     cmake_minimum_required(VERSION 3.0.0)
@@ -181,10 +179,24 @@
     cmake -DCMAKE_C_COMPILER:FILEPATH=C:\path\to\compiler\mingw32-gcc.exe -DCMAKE_CXX_COMPILER:FILEPATH=C:\path\to\compile\mingw32-g++.exe -B build_folder -S path_to_cmakelists -G "MinGW Makefiles"
 
     # VERY IMPORTANT!!!!!!!!!!!!!!!!!!!!! 
-    # (use mingw32-gcc.exe, mingw32-g+.exe for the GCC toolchain on the windows plathform !!!!!!!)
+    # (use mingw32-gcc.exe, mingw32-g++.exe for the GCC toolchain on the windows plathform !!!!!!!)
+
 
 7 - Running some commands
-    # Add_custom_command  should be used
+    # *add_custom_command*  should be used
+	
+    # The next example demonstrates how to include auto-generated files in the project. But firs we need to include auto-generated files in the list of source files.
+	# The Cmake recognizes the file and includes it in the build process.
+	# The file is generated before starting the build process.
+
+	add_custom_command(
+		OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/FileName.c   # it is importand use absolute path + name to the file!!
+		COMMENT "Create FileName.c"
+		COMMAND python ../GenTestFile.py ${CMAKE_CURRENT_SOURCE_DIR}/FileName.c  # the input argument itis a target file name
+		VERBATIM
+	)
+
+
     # The next example describe the custom command running after creating the TARGET_NAME object
 
     add_custom_command (TARGET ${TARGET_NAME} POST_BUILD              # ${TARGET_NAME}  - after TARGET_NAME (it could be the name of *.exe) this command will be run. The name of the target could be name from the 
