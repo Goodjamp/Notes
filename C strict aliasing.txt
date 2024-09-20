@@ -5,8 +5,7 @@ Strict aliasing is an assumption, made by the C (or C++) compiler, that derefere
 
 One pointer is said to alias another pointer when both refer to the same location or object. In this example,
 
-uint32_t 
-swap_words( uint32_t arg )
+uint32_t swap_words( uint32_t arg )
 {
   uint16_t* const sp = (uint16_t*)&arg;
   uint16_t        hi = sp[0];
@@ -29,3 +28,6 @@ It is always presumed that a char* may refer to an alias of any object. It is th
  
  BUT !!!
  Casting from a pointer of one type to pointer of an unrelated type through a char* is undefined.
+ 
+You can use char* for aliasing instead of your system's word. The rules allow an exception for char* (including signed char and unsigned char).
+It's always assumed that char* aliases other types. However this won't work the other way: there's no assumption that your struct aliases a buffer of chars.

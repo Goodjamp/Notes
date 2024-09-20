@@ -1,0 +1,11 @@
+null-forgiving operator !
+https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/operators/null-forgiving
+
+
+lambda expression
+(input-parameters) => expression
+
+
+Delegates are similar to function pointers in C++; however, delegates are type-safe and secure.
+For applications of delegates, see Delegates and Generic Delegates. Delegates are the basis for Events.
+A delegate can be instantiated by associating it either with a named or anonymous method.

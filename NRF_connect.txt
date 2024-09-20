@@ -1,0 +1,25 @@
+The previouse SDK solution based on the NRF_SDK (last version 17.1.0). Currently depricated.
+
+The all new solution from th Nordic company based on the *NRF connect SDK*
+
+The Get started (instruction) with NRF connect SDK: https://developer.nordicsemi.com/nRF_Connect_SDK/doc/2.4.0/nrf/getting_started/recommended_versions.html
+
+The *NRF connect SDK* integrated the Zephyr RTOS. The Zephyr RTOS provide wide range of solution like Bluetooth® Low Energy, Bluetooth mesh, Matter, Thread/Zigbee, Wi-Fi®
+drivers (nrfx) and many other.
+
+To download and set up all you need to develop with NRF_Connect, use the *NRF connect for the Desctop* tool:  https://www.nordicsemi.com/Products/Development-tools/nrf-connect-for-desktop got to Dowmload
+The NRF connect is based and ruquired numerouse tools:
+ Tool
+Toolchain 
+- Zephyr SDK
+- CMake
+- dtc
+- Git
+- gperf
+- ninja
+- Python
+- West
+
+The version of the each tool is on the https://developer.nordicsemi.com/nRF_Connect_SDK/doc/2.4.0/nrf/getting_started/recommended_versions.html
+
+All this 

@@ -1,0 +1,63 @@
+Using the FFmpeg natively with the C++ QT library and the qmake.
+FFMPEG is a powerful freeware video processing toolchain (as a Switzerland knife for the video processing).
+The typical approach to use it is the CLI. But FFmpeg also provides a list of the dynamic linking libraries to use natively on the various platforms (OS, CPU architecture).
+
+I will try to describe how to include the FFmpeg in the C++ Qt project.
+1 - As FFmpeg is an open-source project, we can download it as source code and build all needed libraries for the target platform manually. But the first time, it will be better to use a prebuilt version.
+2 - There are multiple resources maintained of the ffmpeg. Some of these resources make a builds for Windows also. Download the latest prebuilt library from the https://github.com/BtbN/FFmpeg-Builds/releases.
+    The archive includes the dynamically linked libraries (*.dll), statically linked libraries (*.lib), and the dll.a. The freeware QT does not allow static linking, that why we need to use the *.dll libraries.
+
+ The archive hase the next folder tree
+    ffmpeg-root/
+    ├── bin/
+    │   ├── avcodec-61.dll    <- target dll
+    │   ├── avdevice-61.dll   <- target dll
+    │   ├── avfilter-10.dll   <- target dll
+    │   ├── avformat-61.dll   <- target dll
+    │   ├── avutil-59.dll     <- target dll
+    │   ├── postproc-58.dll   <- target dll
+    │   ├── swresample-5.dll  <- target dll
+    │   ├── swscale-8.dll     <- target dll
+    │   ├── content.txt
+    │   ├── ffmpeg.exe
+    │   ├── ffplay.exe
+    │   └── ffprobe.exe
+    ├── doc
+    ├── include
+    └── lib
+
+3 - Take the information about compiler used to build library. Open the Comand prom and go to the ffmpeg-root/bin.
+    Call the command: ffmpeg.exe -version
+    
+	The comamnd return the next string
+	--cc=x86_64-w64-mingw32-gcc --cxx=x86_64-w64-mingw32-g++ --ar=x86_64-w64-mingw32-gcc-ar --ranlib=x86_64-w64-mingw32-gcc-ranlib --nm=x86_64-w64-mingw32-gcc-nm
+	
+	As we can see, the ffmpeg was build the 64 bit version of the MINGw.
+	
+4 - Create the QT project for the MINGw 64-bit version. It is very important to use the same compiler as was used to build the FFmpeg.
+5 - Add the libraries marced as *<- target dll above* to the *.pro file
+
+FFMPEG_PATH=$${PWD}/Resources/ffmpeg-dev
+message(FFMPEG_PATH = $${FFMPEG_PATH})
+
+LIBS += -L"$${FFMPEG_PATH}/bin/" \
+    -lavcodec-61 \
+    -lavdevice-61 \
+    -lavfilter-10 \
+    -lavformat-61 \
+    -lavutil-59 \
+    -lpostproc-58\
+    -lswresample-5 \
+    -lswscale-8
+
+INCLUDEPATH += $$PWD/Resources/ffmpeg-dev/include
+DEPENDPATH += $$PWD/Resources/ffmpeg-dev/include
+
+6 - As FFmpeg mostly was written on the C language, we need to include the FFmpeg headers to the *.cpp files using the extern "C" keyword:
+
+extern "C" {
+     #include <libavcodec/avcodec.h>
+}
+
+
+   

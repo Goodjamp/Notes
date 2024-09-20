@@ -1,5 +1,4 @@
-# the name of the list element coud be created base on the LIST_NAME + Item:
-#
+// the name of the list element coud be created base on the: LIST_NAME + Item:
 
 typedef struct {
     uint8_t val
@@ -10,10 +9,17 @@ typedef struct {
 	ListNameItem item[]
 } ListName;
 
-# Good idea used word entry
+// Good idea used word: ENTRY (for the list or colection item)
+struct myStr {
+    uint8_t f1;
+	uint8_t f2;
+} str[10];
+struct myStr strEntry = str[5];
 
+// The quantity on the name looks good with word: NUMBER 
 
+uint32_t itemNumber;
 
-# The cunantity on the name looks god wit Number word
+// If we wont to pass information about value inside arrY, use word: CONTENT
 
-uint32_t itemNumber; 
+# ARRAY_CONTENT    {1, 2, 3, 4}
