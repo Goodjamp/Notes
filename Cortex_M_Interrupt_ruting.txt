@@ -1,0 +1,33 @@
+Cortex-M3 has 2 stack pointers:
+- main stack pointer MSP
+- proces stack pointer PSP
+
+When an exception or interruption happens the core:
+- the core automatically copies a list of registers to the cu rrent stack (MSP or PSP).
+  The name of the register list is *Stack Frame*. R0-R3, R12, LR, 
+  The operation of copy registers to the stack is called Stacking.
+                                      
+									  
+									  
+									  
+                                      
+                                      
+                                      
+                                      R3
+                                      R12
+                                      LR
+=======>   SP befor Interrup
+         SP - 1
+         SP - 2
+		  ...
+		SP begin
+		   
+          
+
+
+At a minimum, an exception stack frame must contain at least eight words, as shown in the diagram above. These eight words of data contain the caller-saved registers in the regular register bank and information to enable the pre-empted software to resume. Because exception handlers can be implemented as normal C functions, the contents of R0-R3, R12, LR, and RETPSR must be saved. Unlike function calls, the return address for exception handlers is not stored in the LR.
+
+
+
+
+- If interrupt routine need to use all other register, the C function must push and pop all needed register obviously

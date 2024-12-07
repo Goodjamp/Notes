@@ -1,4 +1,4 @@
-1 - Generic template CMakeLists.txt file for the simple mcu arm base project:
+1 - Generic template CMakeLists.txt file for the simple mcu *ARM* base project:
 
     cmake_minimum_required(VERSION 3.0.0)
 
@@ -66,8 +66,6 @@
     add_executable(${CMAKE_PROJECT_NAME}.elf  ${HAL_SRC})
     
 
-
-
 2 - How to run cmake on the Windows with mingw compiler
 
     VERY IMPORTANT!!!!!!!!!!!!!!!!!!!!!    
@@ -78,13 +76,22 @@
     based on runtime platform and available toolsets, and command-line options are the only way presently available to
     influence or override CMake's choice of generator.
 
-    the comand  -G "MinGW Makefiles" MUST BE USED
-    cmake -DCMAKE_C_COMPILER:FILEPATH=C:\path\to\compiler.exe -DCMAKE_CXX_COMPILER:FILEPATH=C:\path\to\compiler.exe -B build_folder -S path_to_cmakelist -G "MinGW Makefiles"
+    the comand  -G "MinGW Makefiles" MUST BE USED to specify generator !!!
+	
+	/*
+	 * The command above specify the build directory, path to compilre and type of make generator as MinGW (for arm-none-eabi-gcc compiler), create MakefilesakeFile
+     */
+    cmake -B build_folder -S path_to_cmakelist -DCMAKE_C_COMPILER:FILEPATH=C:\path\to\compiler.exe -DCMAKE_CXX_COMPILER:FILEPATH=C:\path\to\compiler.exe  -G "MinGW Makefiles"
+	
+	/*
+	 * The command above run all targets from the build folder
+	 */
+	cmake --build build
 
 3 - The compilator settings description
     The compilator settings could be set with multiple manner.
 
-    3.1 - Number one way: using commands *add_compile_options* together with *set(CMAKE_LANGUAGE_FLAGS   "optins")*
+    3.1 - Method #1: using commands *add_compile_options* together with *set(CMAKE_LANGUAGE_FLAGS   "optins")*
 
         # Set combine generic otions for the all compiler.
         # In this list I added the optins that use to descride the mcu: architecture, type of floating point, type of assembler
@@ -108,7 +115,7 @@
         set(CMAKE_CXX_FLAGS "${COMPILER_USER_FLAGS}")
 
 
-    3.2 - Number two way: using only commands *set(CMAKE_LANGUAGE_FLAGS   "optins")*
+    3.2 - Method #1: using only commands *set(CMAKE_LANGUAGE_FLAGS   "optins")*
 
         #descride the generic target options. The options must be placed in quotes " ...options... "
         set(COMPILER_GENERAL_FLAGS "-mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -fno-common")
@@ -185,12 +192,12 @@
 7 - Running some commands
     # *add_custom_command*  should be used
 	
-    # The next example demonstrates how to include auto-generated files in the project. But firs we need to include auto-generated files in the list of source files.
+    # The next example demonstrates how to include auto-generated files in the project. But first we need to include auto-generated files in the list of source files.
 	# The Cmake recognizes the file and includes it in the build process.
 	# The file is generated before starting the build process.
 
 	add_custom_command(
-		OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/FileName.c   # it is importand use absolute path + name to the file!!
+		OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/FileName.c   # Looks like a target. It is importand use absolute path + name to the file!!
 		COMMENT "Create FileName.c"
 		COMMAND python ../GenTestFile.py ${CMAKE_CURRENT_SOURCE_DIR}/FileName.c  # the input argument itis a target file name
 		VERBATIM

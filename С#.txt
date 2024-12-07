@@ -2,6 +2,13 @@ null-forgiving operator !
 https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/operators/null-forgiving
 
 
+Expression-bodied members
+It is a special syntax used to return values.
+In the example below the Expression-bodied syntax is used to return property _a with using the property A
+private int _a;
+public int A => _a; // it is the same as: public int A {get return _a};/
+
+
 lambda expression
 (input-parameters) => expression
 

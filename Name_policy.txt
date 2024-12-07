@@ -23,3 +23,7 @@ uint32_t itemNumber;
 // If we wont to pass information about value inside arrY, use word: CONTENT
 
 # ARRAY_CONTENT    {1, 2, 3, 4}
+
+//synonims list: compute, calculate
+
+// synonims: before, leading

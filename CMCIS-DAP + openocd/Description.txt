@@ -1,0 +1,15 @@
+General architecture of VSCode   +         openocd           +   gdb     +   CMSIC-DAP
+                                     arm-none-eabi-gdb.exe   
+
+
+
+
+                     VSCode (free SW)                                  openocd (free SW)
+	- send command (like a flash, erace, read, step)          
+	  to the openocd according to the UI controls
+	- display result commands processing on UI
+	
+
+The STM32f103c8 CMSIC-DAP FW: https://github.com/xjtuecho/CMSIS-DAP
+
+CMSIC-DAP it a free programe project to download and debug 
