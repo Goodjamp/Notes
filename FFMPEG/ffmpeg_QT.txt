@@ -3,6 +3,7 @@ FFMPEG is a powerful freeware video processing toolchain (as a Switzerland knife
 The typical approach to use it is the CLI. But FFmpeg also provides a list of the dynamic linking libraries to use natively on the various platforms (OS, CPU architecture).
 
 I will try to describe how to include the FFmpeg in the C++ Qt project.
+
 1 - As FFmpeg is an open-source project, we can download it as source code and build all needed libraries for the target platform manually. But the first time, it will be better to use a prebuilt version.
 2 - There are multiple resources maintained of the ffmpeg. Some of these resources make a builds for Windows also. Download the latest prebuilt library from the https://github.com/BtbN/FFmpeg-Builds/releases.
     The archive includes the dynamically linked libraries (*.dll), statically linked libraries (*.lib), and the dll.a. The freeware QT does not allow static linking, that why we need to use the *.dll libraries.

@@ -25,9 +25,14 @@ CASTING TO CHAR*
 
 It is always presumed that a char* may refer to an alias of any object. It is therefore quite safe, if perhaps a bit unoptimal
 (for architecture with wide loads and stores) to cast any pointer of any type to a char* type.
- 
+
+uint32_t value = 0x12345678;
+unsigned char *p = (unsigned char*)&value;
+
  BUT !!!
  Casting from a pointer of one type to pointer of an unrelated type through a char* is undefined.
+ char arr[4] = {1, 2, 3, 4};
+ uint32_t *val = (uint32_t *)arr;
  
 You can use char* for aliasing instead of your system's word. The rules allow an exception for char* (including signed char and unsigned char).
 It's always assumed that char* aliases other types. However this won't work the other way: there's no assumption that your struct aliases a buffer of chars.

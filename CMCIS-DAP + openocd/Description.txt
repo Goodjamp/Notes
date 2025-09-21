@@ -1,15 +1,52 @@
-General architecture of VSCode   +         openocd           +   gdb     +   CMSIC-DAP
-                                     arm-none-eabi-gdb.exe   
+
+
+			 The general architecture of VSCode download/debug
+
+
+VSCode launch.json -> arm-none-eabi-gdb.exe -> openocd -> CMSIC-DAP
+                                        
+
+For flashing  and debug MCU we need the SW above:
+- VSCode
+- arm-none-eabi-gdb.exe
+- openocd
++ CMSIC-DAP programer
+
+VSCode 
+VSCode is a free IDE. It could use a CMakeLists file as a project file.
+For download/debugging:                           
+- send command (like a flash, erase, read, step)          
+  to the openocd according to the UI controls
+- display result commands processing on UI
+
+arm-none-eabi-gdb.exe
+arm-none-eabi-gdb.exe is a free gdb client shared with the Arm GNU Toolchain.
+The main goal of this SW: send debug commands (e.g., breakpoints, stepping, memory inspection) to OpenOCD via the GDB Remote Serial Protocol (RSP) and
+displays information like register values, stack frames, and disassembly to the developer.
+The arm-none-eabi-gdb.exe connects to OpenOCD over a TCP/IP socket (the GDB interface's default port is 3333).
+
+OpenOCD
+OpenOCD is a free SW gdb server. It is a bridge between the gdb
+client (for example arm-none-eabi-gdb) and programmer (CMSIC-DAP, JLink, StLink, and so on).
+
+CMSIC-DAP
+CMSIC-DAP iф a free FW project to download and debug FW
+The STM32f103c8 CMSIC-DAP FW: https://github.com/xjtuecho/CMSIS-DAP.
 
 
 
-
-                     VSCode (free SW)                                  openocd (free SW)
-	- send command (like a flash, erace, read, step)          
-	  to the openocd according to the UI controls
-	- display result commands processing on UI
-	
-
-The STM32f103c8 CMSIC-DAP FW: https://github.com/xjtuecho/CMSIS-DAP
-
-CMSIC-DAP it a free programe project to download and debug 
++-----------------------------------------------+       GDB Remote Serial Protocol       +-------------+
+|        GDB                                    | <------------------------------------> |   OpenOCD   |
+| On VSC ode's launch.json file, the user has   |                                        +-------------+
+| set the gdb interface type:                   |							                    |
+| Segger J-Link GDB Server, pyOCD, openocd      |                                               | USB/HID or USB/Bulk (CMSIS-DAP Protocol)
+| We have to set the openocd	                |							                    v
+|			                                    |		                  			 +-----------------+	
++-----------------------------------------------+		                  			 |   CMSIS-DAP     |
+													                  				 +-----------------+
+                  																			 |
+				                  															 | SWD or JTAG (ARM Debug Interface)
+								                  											 v
+												                  			   +-----------------------------+
+															                   |  Target Microcontroller     |
+									                  						   +-----------------------------+

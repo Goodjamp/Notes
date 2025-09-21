@@ -1,0 +1,29 @@
+https://slhck.info/ffmpeg-encoding-course/#/9
+
+https://habr.com/ru/companies/edison/articles/495614/
+
+
+inspect video over the ffprobe: https://slhck.info/ffmpeg-encoding-course/#/47
+
+
+
+
+RTP timing. Key feature
+Key Points:
+time_base:
+
+Set as {1, 90000} for RTP with H.264.
+Ensures timestamps align with the RTP clock.
+framerate:
+
+Configured as {30, 1} for 30 FPS.
+pts and dts:
+
+Calculated as i * (time_base.denominator / framerate.num) for each frame.
+Packetization:
+
+FFmpeg handles the H.264 packetization for RTP automatically, splitting the encoded frame into RTP packets.
+SDP File:
+
+If needed, generate an SDP file with av_sdp_create and save it for client playback configuration.
+This setup streams H.264-encoded frames over RTP with timestamps calculated for 30 FPS.

@@ -1,0 +1,33 @@
+openocd.exe -c "gdb_port 50000" -c "tcl_port 50001" -c "telnet_port 50002" -s "C:/Program Files (x86)/Nuvoton Tools/NuEclipse/V1.02.020/NuEclipse/eclipse/OpenOCD/scripts" -f "c:/Users/aleksand.gerasimchuk/.vscode/extensions/marus25.cortex-debug-1.12.1/support/openocd-helpers.tcl" -f interface/nulink.cfg -f target/numicroM23.cfg
+
+
+#run gdb client (arm-none-eabi-gdb)
+arm-none-eabi-gdb.exe -q --interpreter=mi2 1-gdb-version
+
+#connect to GDB server (For example OpenOcd)
+target remote localhost:50000
+
+# flash MCU *.hex file
+monitor program D:/Programing/MCU/JonesyLake/en-us--M251_M252_M254_M256_M258_Series_BSP_CMSIS_V3.02.007/SampleCode/StdDriver/GPIO_OutputInput/GCC/Release/GPIO_OutputInput.hex
+
+#reset MCU to start FW
+monitor reset run
+
+#continue execute program
+continue
+
+#download *.elf to gdb to monitor code as is
+-file-exec-and-symbols GPIO_OutputInput.elf
+
+#stop progrsm: key
+CTR+C
+
+
+#stop at main() functine
+break main
+
+
+# look at current stop 
+monitor flash erase_check # erace
+
+load

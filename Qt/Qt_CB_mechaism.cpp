@@ -2,7 +2,8 @@
 #include <stdint.h>
 
 /* 
- * On the Qt, we can tx CB (the method of the class called from another class) over the signal, to the slot.
+ * On the Qt, we can pass CB function (the method of the class called from another class) over the signal, to the slot: the signall pass
+ * the pointer to the own method, and the slot can call the this method.
  * To do this we can use the *function* method of the std library, like next:
  * std::function<void(int a, bool b)>
  * 
@@ -40,7 +41,7 @@ public slots:
     sltA(std::function<void(int a, bool b)> cb);
 	{
 	    /*
-		 * Call cb function
+		 * Call cb function (for example the method of class B on the thread of the class A)
 		 */
 		CALL_CB(cb, vara, varb);
 	}
